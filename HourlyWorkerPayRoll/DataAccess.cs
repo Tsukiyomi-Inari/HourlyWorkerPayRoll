@@ -8,9 +8,10 @@
 // Piecework Worker data objects and a database.
 
 using System;
-// See this StackOverflow answer: https://stackoverflow.com/a/54472192
 using System.Configuration;
+// See this StackOverflow answer: https://stackoverflow.com/a/54472192
 using System.Data;
+using System.Data.SqlClient;
 
 namespace HourlyWorkerPayRoll
 {
@@ -32,6 +33,15 @@ namespace HourlyWorkerPayRoll
              * class recording on the subject of connection strings (Week 6/7),
              * as well as https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/connection-strings-and-configuration-files .
              * Other options may be viable. */
+
+			//return "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" +
+			//	   "C:\\Users\\Katherine Bellman\\Source\\Repos\\HourlyWorkerPayroll\\HourlyWorkerPayroll" +
+			//	   "\\WorkerDatabase.mdf;Integrated Security=True;Connect Timeout=30";
+
+			// The following is better - no absolute/fixed path - but it won't actually work while we're debugging. You can try a variant on this.
+			//return "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" +
+			//    Directory.GetCurrentDirectory() +
+			//    "\\WorkerDatabase.mdf;Integrated Security=True;Connect Timeout=30";
 
 			string returnValue = null;
 
@@ -90,7 +100,7 @@ namespace HourlyWorkerPayRoll
 		/// </summary>
 		/// <param name="insertWorker">a worker object to be inserted</param>
 		/// <returns>true if successful</returns>
-		internal static bool InsertNewRecord(PieceworkWorker insertWorker)
+		internal static bool InsertNewRecord(HourlyWorkerPay insertWorker)
 		{
 			// Create return value
 			bool returnValue = false;

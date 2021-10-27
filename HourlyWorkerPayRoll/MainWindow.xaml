@@ -394,7 +394,7 @@
 			</TabItem>
 	</TabControl>
 		<!--Row 1: Contains the Exit button, available to all tabs.-->
-		<Button x:Name="buttonExit" Content="E_xit" Margin="10,4" Grid.Row="1" ToolTip="Click here to exit the application." Background="AliceBlue" />
+		<Button x:Name="buttonExit" Content="E_xit" Margin="10,4" Grid.Row="1" ToolTip="Click here to exit the application." Background="AliceBlue" Click="CloseClick" />
 		
 
 		<!--Row 2: Contains the StatusBar.-->
