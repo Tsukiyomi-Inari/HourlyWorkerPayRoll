@@ -1,6 +1,6 @@
 ﻿// HourlyWorkerPay.cs
 //         Title: IncInc Payroll (Piecework)
-// Last Modified: October 11th 2021
+// Last Modified: October 29th 2021
 //    Written By: Katherine Bellman
 // Adapted from PieceworkWorker by Kyle Chapman, September 2019
 // 
@@ -23,6 +23,8 @@ namespace HourlyWorkerPayRoll
 
 		// Instance variables
 		private string employeeName;
+		private string employeeFName;
+		private string employeeLName;
 		private int employeeMessages;
 		private decimal employeePay;
 
@@ -142,7 +144,12 @@ namespace HourlyWorkerPayRoll
 		/// <returns>an employee's name</returns>
 		public string Name
 		{
-			get { return employeeName; }
+			get
+			{
+				//returns full name
+				employeeName = employeeFName + " " + employeeLName;
+				return employeeName;
+			}
 			set
 			{
 				if (value.Trim() == string.Empty)
@@ -156,8 +163,12 @@ namespace HourlyWorkerPayRoll
 				{
 					//When no alphabetic characters are found within input field, inform user of error
 					throw new ArgumentException("Worker name can only have alphabetical characters.", NameParameter);
-
 				}
+
+				//sets the name to it's separate parts, first and last
+				value.Split(" ");
+				employeeFName = value[0].ToString();
+				employeeLName = value[1].ToString();
 
 
 			}

@@ -402,9 +402,7 @@
 			<StatusBarItem HorizontalAlignment="Left" VerticalAlignment="Center" >
 				<Label x:Name="labelStatus" Content="Current Status:" FontSize="12" Height="41" Background="Transparent" />
 			</StatusBarItem>
-			<StatusBarItem HorizontalAlignment="Right" VerticalAlignment="Center">
-				12/12/12 12:12
-			</StatusBarItem>
+			<StatusBarItem x:Name="statusBarClock" HorizontalAlignment="Right" VerticalAlignment="Center" Content="" Loaded="DisplayClock" /> 
 		</StatusBar>
 
 	</Grid>

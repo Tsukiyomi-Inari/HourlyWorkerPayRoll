@@ -48,7 +48,7 @@ namespace HourlyWorkerPayRoll
 			// Look for myConnectionString in the connectionStrings section.
 			ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[1];
 
-			// If found, return the connection string.
+			//// If found, return the connection string.
 			if (settings != null)
 				returnValue = settings.ConnectionString;
 
@@ -112,6 +112,7 @@ namespace HourlyWorkerPayRoll
 			SqlCommand command = new SqlCommand("INSERT INTO Entries VALUES(@firstName, @lastName, @messages, @pay, @entryDate)", dbConnection);
 
 			// TO DO The next two lines assume workers only have 1 name. Read your requirements carefully!
+			//TODO: string of name will need to be split for entry into SQL
 			command.Parameters.AddWithValue("@firstName", insertWorker.Name);
 			command.Parameters.AddWithValue("@lastName", insertWorker.Name);
 			command.Parameters.AddWithValue("@messages", insertWorker.Messages);
