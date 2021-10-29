@@ -17,16 +17,16 @@ namespace HourlyWorkerPayRoll
 {
 	public partial class MainWindow
 	{
-		System.Windows.Threading.DispatcherTimer Timer = new System.Windows.Threading.DispatcherTimer();
+		System.Windows.Threading.DispatcherTimer Timer = new();
 		public MainWindow()
 		{
 			InitializeComponent();
 			LoadSummary();
 
-			// Clock functionality reference :https://www.c-sharpcorner.com/blogs/digital-clock-in-wpf1
+			//// Clock functionality reference :https://www.c-sharpcorner.com/blogs/digital-clock-in-wpf1
 			Timer.Tick += new EventHandler(DisplayClock);
 
-			Timer.Interval = new TimeSpan(0, 0, 1);
+			Timer.Interval = new TimeSpan(00, 00, 01);
 
 			Timer.Start();
 		}
@@ -47,7 +47,7 @@ namespace HourlyWorkerPayRoll
 			RemoveRedAngryError((TextBox)sender);
 
 			//check which sent changed event to change label
-			if ((TextBox)sender == textBoxWorkerName)
+			if ((TextBox)sender == textBoxWorkerNameFirst || (TextBox)sender == textBoxWorkerNameLast)
 			{
 				labelNameError.Content = string.Empty;
 			}
@@ -73,14 +73,16 @@ namespace HourlyWorkerPayRoll
 			try
 			{
 				//create a new HourlyWorkerPay object and apply textbox inputs to attributes
-				HourlyWorkerPay worker = new(textBoxWorkerName.Text, textBoxMessagesSent.Text);
+				HourlyWorkerPay worker = new(textBoxWorkerNameFirst.Text, textBoxWorkerNameLast.Text, textBoxMessagesSent.Text);
 
 				//Should worker have 0 as pay, it is not valid
 				//Error message will have alredy been reported to user
 				if (worker.Pay == 0)
 				{
-					textBoxWorkerName.Focus();
-					textBoxWorkerName.SelectAll();
+					textBoxWorkerNameFirst.Focus();
+					textBoxWorkerNameFirst.SelectAll();
+					textBoxWorkerNameLast.Focus();
+					textBoxWorkerNameLast.SelectAll();
 				}
 				//Show attributes of current worker to user, as input is valid
 				else
@@ -91,7 +93,8 @@ namespace HourlyWorkerPayRoll
 
 				//Disable calculate button & input fields
 				buttonCalculate.IsEnabled = false;
-				textBoxWorkerName.IsEnabled = false;
+				textBoxWorkerNameFirst.IsEnabled = false;
+				textBoxWorkerNameLast.IsEnabled = false;
 				textBoxMessagesSent.IsEnabled = false;
 
 				//Clear ANGRY RED errors
@@ -103,12 +106,13 @@ namespace HourlyWorkerPayRoll
 			//To catch argumentexceptions for responses to predicted issues within HourlyWorkerPay class
 			catch (ArgumentException error)
 			{
+				//todo: KEEP OR CHANGE TO REGULAR VALIDATION HANDLING 
 				switch (error.ParamName)
 				{
 					//Check other parameters
 					case HourlyWorkerPay.NameParameter:
 						labelNameError.Content = error.Message;
-						ShowRedAngryError(textBoxWorkerName);
+						ShowRedAngryError(textBoxWorkerNameFirst);
 						break;
 					case HourlyWorkerPay.MessagesParameter:
 						labelMessagesError.Content = error.Message;
@@ -138,7 +142,7 @@ namespace HourlyWorkerPayRoll
 		private void LoadSummary()
 		{
 
-			textBoxTotalPay.Text = HourlyWorkerPay.TotalPay.ToString("C");
+			textBoxTotalPay.Text = DataAccess.GetTotalPay().ToString();
 			textBoxTotalMessages.Text = HourlyWorkerPay.TotalMessages.ToString();
 			textBoxTotalWorkers.Text = HourlyWorkerPay.TotalWorkers.ToString();
 
@@ -187,15 +191,23 @@ namespace HourlyWorkerPayRoll
 			Close();
 		}
 
-
+		/// <summary>
+		/// Gets the time of day
+		/// outputs time as specified format
+		/// uses Ticks to track time intervals for each part of
+		/// the clock display output & updates it as
+		/// time elapses
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="eventArgs"></param>
 		private void DisplayClock(object sender, EventArgs eventArgs)
 		{
-			// Clock functionality reference :https://www.c-sharpcorner.com/blogs/digital-clock-in-wpf1
-			//sets the current time to a varriable
-			var time = DateTime.Now;
+			//sets the current time to a varriable (Reference: link below, for TimeOfDay rather than without it)
+			var time = DateTime.Now.TimeOfDay;
 
+			// reference for obtaining 12h time format rather than 24 h format: https://stackoverflow.com/questions/10123426/how-to-convert-24-hour-format-timespan-to-12-hour-format-timespan
 			//concatenates the time from DateTime.Now and sends it to Content output for statusBarClock item
-			statusBarClock.Content = time.Hour + " : " + time.Minute + " : " + time.Second;
+			statusBarClock.Content = new DateTime(time.Ticks).ToString("hh:mm:ss tt");
 		}
 
 		#endregion
@@ -211,21 +223,23 @@ namespace HourlyWorkerPayRoll
 		private void SetDefaults()
 		{
 			//Clear input fields & clear worker Total pay output textbox
-			textBoxWorkerName.Clear();
+			textBoxWorkerNameFirst.Clear();
+			textBoxWorkerNameLast.Clear();
 			textBoxMessagesSent.Clear();
 
 			textBoxWorkerTotalPay.Text = "$0.00";
 
 			//Re-enable disabled controls
 			buttonCalculate.IsEnabled = true;
-			textBoxWorkerName.IsEnabled = true;
+			textBoxWorkerNameFirst.IsEnabled = true;
+			textBoxWorkerNameLast.IsEnabled = true;
 			textBoxMessagesSent.IsEnabled = true;
 
 			//Reset all error lables
 			ClearAllAngryRedErrors();
 
 			//Set focus to first user input textbox
-			textBoxWorkerName.Focus();
+			textBoxWorkerNameFirst.Focus();
 		}
 
 		/// <summary>
@@ -264,7 +278,8 @@ namespace HourlyWorkerPayRoll
 		private void ClearAllAngryRedErrors()
 		{
 			//Remove error colour settings from textboxes
-			RemoveRedAngryError(textBoxWorkerName);
+			RemoveRedAngryError(textBoxWorkerNameFirst);
+			RemoveRedAngryError(textBoxWorkerNameLast);
 			RemoveRedAngryError(textBoxMessagesSent);
 
 			//clear error message labels

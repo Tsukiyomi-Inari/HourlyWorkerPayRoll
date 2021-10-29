@@ -5,12 +5,13 @@
 	
 		Modified: 
 	-->
-<hc:Window x:Class="HourlyWorkerPayRoll.MainWindow"
+<hc:Window
            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:hc="https://handyorg.github.io/handycontrol"
+           xmlns:SqlClient="clr-namespace:System.Data.SqlClient;assembly=System.Data.SqlClient" x:Class="HourlyWorkerPayRoll.MainWindow"
            mc:Ignorable="d"
            Title="Incorporeal Incorporated Payroll"
            WindowStartupLocation="CenterScreen"
@@ -20,9 +21,9 @@
            Icon="/IncIncLogo.png"
 		
 >
-    <hc:Window.NonClientAreaContent>
-	    <Label Visibility="Hidden"></Label>
-    </hc:Window.NonClientAreaContent>
+	<hc:Window.NonClientAreaContent>
+		<Label Visibility="Hidden"/>
+	</hc:Window.NonClientAreaContent>
 	<Grid Background="LightSteelBlue">
 		<!--Define rows for the outermost Grid, containing the tab control.-->
 		<Grid.RowDefinitions>
@@ -30,55 +31,65 @@
 			<RowDefinition Height="35" />
 			<RowDefinition Height="35" />
 		</Grid.RowDefinitions>
-		
+
 
 		<!--Row 0: Contains the TabControl.-->
 		<TabControl x:Name="tabControlInterface"  Background="#FFF2F2F2" Foreground="LightBlue" >
-<!--Tab1 - PAYROLL ENTRY-->
-			<TabItem x:Name="tabPayrollEntry" Header="_Payroll Entry" Background="AliceBlue"  >
+			<TabItem x:Name="tabPayrollEntry" Header="_Payroll Entry" Background="AliceBlue" ToolTip="View Payroll Entry Tab"   >
 				<hc:SimplePanel Background="LightSteelBlue">
-				<!--Copy/paste your Payroll Entry form XAML from Lab 2 (or Lab 1) here.-->
-				<!--Start from the first (outermost) <Grid> tag up until the </Grid>.-->
-				<!--Remove unnecessary controls; the only buttons that should remain are "Calculate" and "Clear".-->
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition />
-						<ColumnDefinition />
-					</Grid.ColumnDefinitions>
+					<!--Copy/paste your Payroll Entry form XAML from Lab 2 (or Lab 1) here.-->
+					<!--Start from the first (outermost) <Grid> tag up until the </Grid>.-->
+					<!--Remove unnecessary controls; the only buttons that should remain are "Calculate" and "Clear".-->
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition />
+							<ColumnDefinition />
+						</Grid.ColumnDefinitions>
 
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1.5*" />
-						<RowDefinition Height="1.5*" />
-						<RowDefinition Height="1.5*" />
-						<RowDefinition Height="1.5*" />
+						<Grid.RowDefinitions>
+							<RowDefinition Height="1.5*" />
+							<RowDefinition Height="1.5*" />
+							<RowDefinition Height="1.5*" />
+							<RowDefinition Height="1.5*" />
 
-					</Grid.RowDefinitions>
+						</Grid.RowDefinitions>
 
-					<!--  main_Row 0  -->
-					<Label
+						<Label
 			Margin="4"
 			HorizontalAlignment="Right"
 			VerticalAlignment="Center"
 			Content="Worker Name:"
-			Target="{Binding ElementName=textBoxWorkerName}"
+			Target="{Binding ElementName=textBoxWorkerNameFirst}"
 			BorderBrush="Transparent"
 			Background="Transparent"
 			/>
-					<TextBox
-			x:Name="textBoxWorkerName"
+						<TextBox
+			x:Name="textBoxWorkerNameFirst"
 			Grid.Row="0"
 			Grid.Column="1"
-			Width="200"
-			Margin="4,0, 0,5"
+			Width="122"
+			Margin="4,27,0,0"
 			HorizontalAlignment="Left"
-			VerticalAlignment="Center"
+			VerticalAlignment="Top"
 			TextWrapping="Wrap"
-			ToolTip="Enter the name of the workeer whose pay you are calculating"
+			ToolTip="Enter the first name of the workeer whose pay you are calculating"
 			TabIndex="0"
 			TextChanged="TextBoxChanged"
 			/>
 
-					<Label 
+						<TextBox
+		  x:Name="textBoxWorkerNameLast"
+		  Width="122"
+		  
+		  HorizontalAlignment="Left"
+		  VerticalAlignment="Top"
+		  TextWrapping="Wrap"
+		  ToolTip="Enter the last name of the workeer whose pay you are calculating"
+		  TabIndex="1"
+		  TextChanged="TextBoxChanged"
+		  Grid.Column="1" Margin="162,27,0,0"
+			/>
+						<Label 
 			x:Name="labelNameError"
 			Grid.Row="0"
 			Width="294"
@@ -92,8 +103,8 @@
 			Background="Transparent"
 			/>
 
-					<!--  main_Row1  -->
-					<Label
+						<!--  main_Row1  -->
+						<Label
 			Grid.Row="1"
 			Grid.Column="0"
 			Margin="4"
@@ -104,7 +115,7 @@
 			BorderBrush="Transparent"
 			Background="Transparent"
 			/>
-					<TextBox
+						<TextBox
 			x:Name="textBoxMessagesSent"
 			Grid.Row="1"
 			Grid.Column="1"
@@ -114,11 +125,11 @@
 			VerticalAlignment="Center"
 			TextWrapping="Wrap"
 			ToolTip="Enter the number of messages worker sent" 
-			TabIndex="1"
+			TabIndex="2"
 			TextChanged="TextBoxChanged"
 			/>
 
-					<Label
+						<Label
 			x:Name="labelMessagesError"
 			Grid.Row="1"
 			Width="294"
@@ -132,21 +143,20 @@
 			Background="Transparent"
 			/>
 
-					<!--  main_Row2  -->
-					<Label
+						<!--  main_Row2  -->
+						<Label
 			Grid.Row="2"
 			Grid.Column="0"
 			Margin="4"
 			HorizontalAlignment="Right"
 			VerticalAlignment="Center"
 			Content="Total Pay:"
-			Target="{Binding 
-			ElementName=textBoxWorkerTotalPay}" 
+			Target="{Binding ElementName=textBoxWorkerTotalPay}" 
 			BorderBrush="Transparent"
 			Background="Transparent"
 			/>
 
-					<TextBox
+						<TextBox
 			x:Name="textBoxWorkerTotalPay"
 			Grid.Row="2"
 			Grid.Column="1"
@@ -161,8 +171,8 @@
 			Background="#FFDEDEDE" 
 			/>
 
-					<!--  main_Row3  -->
-			<Button
+						<!--  main_Row3  -->
+						<Button
 			x:Name="buttonCalculate"
 			Grid.Row="3"
 			Grid.Column="0"
@@ -170,13 +180,13 @@
 			Content="_Calculate Pay"
 			IsDefault="True"
 			ToolTip="Click to calculate current worker's pay"
-			TabIndex="2"
+			TabIndex="3"
 			Click="CalculateClick"
 			Width="200" 
 			Height="67" 
 			Background="AliceBlue"
 			/>
-					<Button
+						<Button
 			x:Name="buttonClear"
 			Grid.Row="3"
 			Grid.Column="1"
@@ -190,12 +200,11 @@
 			Width="200" 
 			Height="67" 
 			/>
-				</Grid>
+					</Grid>
 				</hc:SimplePanel>
 			</TabItem>
 
-<!--Tab2 - SUMMARY-->
-			<TabItem x:Name="tabSummary" Header="_Summary" Background="AliceBlue">
+			<TabItem x:Name="tabSummary" Header="_Summary" Background="AliceBlue" ToolTip="View Summary Tab"  >
 				<hc:SimplePanel Background="LightSteelBlue">
 					<Grid>
 						<Grid.ColumnDefinitions>
@@ -386,23 +395,25 @@
 					</Grid>
 				</hc:SimplePanel>
 			</TabItem>
-<!--Tab3 - EMPLOYEE LIST-->
-			<TabItem x:Name="tabEmployeeList" Header="_Employee List " Background="AliceBlue">
-	<!--SQL DATA TABLE-->
-				<DataGrid x:Name="dataGridEmployees" Background="LightSteelBlue" />
-	<!--This DataGrid may need some other properties set.-->
+			<TabItem x:Name="tabEmployeeList" Header="_Employee List " Background="AliceBlue" ToolTip="View Employee List Tab" >
+				<DataGrid x:Name="dataGridEmployees" Background="LightSteelBlue" ToolTip="Employee Information in Data Grid View"  >
+					<DataGrid.ItemsSource>
+						<SqlClient:SqlConnectionStringBuilder DataSource="Data Source=(LocalDB)\MSSQLLocalDB" AttachDBFilename="C:\Users\Kat\source\repos\FALL-2021\NETD-3202\Labs\HourlyWorkerPayRoll\HourlyWorkerPayRoll\WorkerDatabase.mdf"/>
+					</DataGrid.ItemsSource>
+				</DataGrid>
+				<!--This DataGrid may need some other properties set.-->
 			</TabItem>
-	</TabControl>
+		</TabControl>
 		<!--Row 1: Contains the Exit button, available to all tabs.-->
-		<Button x:Name="buttonExit" Content="E_xit" Margin="10,4" Grid.Row="1" ToolTip="Click here to exit the application." Background="AliceBlue" Click="CloseClick" />
-		
+		<Button x:Name="buttonExit" Content="E_xit" Margin="10,4" Grid.Row="1" ToolTip="Click here to exit the application." Background="AliceBlue" Click="CloseClick"  TabIndex="8" />
+
 
 		<!--Row 2: Contains the StatusBar.-->
 		<StatusBar x:Name="statusArea" Grid.Row="2" Background="#FFF2F2F2">
 			<StatusBarItem HorizontalAlignment="Left" VerticalAlignment="Center" >
 				<Label x:Name="labelStatus" Content="Current Status:" FontSize="12" Height="41" Background="Transparent" />
 			</StatusBarItem>
-			<StatusBarItem x:Name="statusBarClock" HorizontalAlignment="Right" VerticalAlignment="Center" Content="" Loaded="DisplayClock" /> 
+			<StatusBarItem x:Name="statusBarClock" HorizontalAlignment="Right" VerticalAlignment="Center" Content="" Loaded="DisplayClock" />
 		</StatusBar>
 
 	</Grid>

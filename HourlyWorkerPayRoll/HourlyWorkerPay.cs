@@ -22,7 +22,7 @@ namespace HourlyWorkerPayRoll
 		#region "VARIABLE DECLARATIONS"
 
 		// Instance variables
-		private string employeeName;
+		//private string employeeName;
 		private string employeeFName;
 		private string employeeLName;
 		private int employeeMessages;
@@ -49,12 +49,14 @@ namespace HourlyWorkerPayRoll
 		/// HourlyWorker constructor: accepts a worker's name and number of
 		/// messages, sets and calculates values as appropriate.
 		/// </summary>
-		/// <param name="nameValue">the worker's name</param>
+		/// <param name="firstNameValue">the worker's first name</param>
+		/// <param name="lastNameValue">the worker's last name</param>
 		/// <param name="messageValue">a worker's number of messages sent</param>
-		public HourlyWorkerPay(string nameValue, string messagesValue)
+		public HourlyWorkerPay(string firstNameValue, string lastNameValue, string messagesValue)
 		{
 			// Validate and set the worker's name
-			this.Name = nameValue;
+			this.FirstName = firstNameValue;
+			this.LastName = lastNameValue;
 			// Validate Validate and set the worker's number of messages
 			this.Messages = messagesValue;
 			// Calculcate the worker's pay and update all summary values
@@ -138,18 +140,9 @@ namespace HourlyWorkerPayRoll
 
 		#region "PROPERTY PROCEDURES"
 
-		/// <summary>
-		/// Gets and sets a worker's name
-		/// </summary>
-		/// <returns>an employee's name</returns>
-		public string Name
+		public string FirstName
 		{
-			get
-			{
-				//returns full name
-				employeeName = employeeFName + " " + employeeLName;
-				return employeeName;
-			}
+			get { return employeeFName; }
 			set
 			{
 				if (value.Trim() == string.Empty)
@@ -164,13 +157,27 @@ namespace HourlyWorkerPayRoll
 					//When no alphabetic characters are found within input field, inform user of error
 					throw new ArgumentException("Worker name can only have alphabetical characters.", NameParameter);
 				}
-
-				//sets the name to it's separate parts, first and last
-				value.Split(" ");
-				employeeFName = value[0].ToString();
-				employeeLName = value[1].ToString();
+			}
+		}
 
 
+		public string LastName
+		{
+			get { return employeeLName; }
+			set
+			{
+				if (value.Trim() == string.Empty)
+				{
+					//Should name textbox be empty
+					throw new ArgumentNullException(NameParameter, "Worker name can not be empty!");
+				}
+
+				//checks input for non alphabetic entry
+				if (!Regex.IsMatch(value.Trim(), @"^[a-zA-Z]+$"))
+				{
+					//When no alphabetic characters are found within input field, inform user of error
+					throw new ArgumentException("Worker name can only have alphabetical characters.", NameParameter);
+				}
 			}
 		}
 
@@ -187,12 +194,21 @@ namespace HourlyWorkerPayRoll
 				try
 				{
 					//Prevent non-numerical values from being passed to messages
-					if (!int.TryParse(value, out employeeMessages))
+					if (!int.TryParse(value, out var temp))
 					{
 						//if not able to convert input to integer, it get's caught by formatexception but processed by argument exception
 						throw new ArgumentException(MessagesParameter, "Messages can only contain numerical values");
 					}
 
+					if (!(temp >= 15000))
+					{
+						employeeMessages = temp;
+					}
+					else
+					{
+						throw new ArgumentException("Message sent value can NOT exceed or be equal to 15000",
+							MessagesParameter);
+					}
 				}
 				catch (ArgumentNullException)
 				{

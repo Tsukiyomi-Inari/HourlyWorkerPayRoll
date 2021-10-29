@@ -15,7 +15,7 @@ using System.Data.SqlClient;
 
 namespace HourlyWorkerPayRoll
 {
-	class DataAccess
+	class DataAccess : HourlyWorkerPay
 	{
 
 		#region "Connection String"
@@ -113,8 +113,8 @@ namespace HourlyWorkerPayRoll
 
 			// TO DO The next two lines assume workers only have 1 name. Read your requirements carefully!
 			//TODO: string of name will need to be split for entry into SQL
-			command.Parameters.AddWithValue("@firstName", insertWorker.Name);
-			command.Parameters.AddWithValue("@lastName", insertWorker.Name);
+			command.Parameters.AddWithValue("@firstName", insertWorker.FirstName);
+			command.Parameters.AddWithValue("@lastName", insertWorker.LastName);
 			command.Parameters.AddWithValue("@messages", insertWorker.Messages);
 			command.Parameters.AddWithValue("@pay", insertWorker.Pay);
 			// TO DO This line assumes the PieceworkWorker class has no Date property. Careful!
