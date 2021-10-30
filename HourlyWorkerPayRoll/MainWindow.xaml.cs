@@ -8,6 +8,7 @@
  *
  */
 
+using HandyControl.Tools.Extension;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +22,8 @@ namespace HourlyWorkerPayRoll
 		public MainWindow()
 		{
 			InitializeComponent();
-			LoadSummary();
+			LoadSqlData();
+			//LoadSummary();
 
 			//// Clock functionality reference :https://www.c-sharpcorner.com/blogs/digital-clock-in-wpf1
 			Timer.Tick += new EventHandler(DisplayClock);
@@ -176,6 +178,10 @@ namespace HourlyWorkerPayRoll
 			textBoxTotalWorkers.Text = "0";
 		}
 
+		#region EMPLOYEE LIST TAB EVENT HANDLERS
+
+
+		#endregion
 		#endregion
 
 		#region APPLICATION LEVEL EVENT HANDLERS
@@ -285,6 +291,14 @@ namespace HourlyWorkerPayRoll
 			//clear error message labels
 			labelNameError.Content = string.Empty;
 			labelMessagesError.Content = string.Empty;
+		}
+
+		private void LoadSqlData()
+		{
+			DataGrid temp = new();
+			temp = HourlyWorkerPay.ShowDataGrid();
+			dataGridEmployeeList = new DataGrid();
+			dataGridEmployeeList.Show();
 		}
 
 

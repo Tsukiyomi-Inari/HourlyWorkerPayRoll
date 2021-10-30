@@ -12,7 +12,9 @@
 
 
 using System;
+using System.Data;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 
 namespace HourlyWorkerPayRoll
 {
@@ -309,6 +311,15 @@ namespace HourlyWorkerPayRoll
 			overallAverage = 0;
 			overallMessages = 0;
 			overallNumberOfEmployees = 0;
+		}
+
+		public static DataGrid ShowDataGrid()
+		{
+			DataGrid toGrid = new DataGrid();
+			var fromTable = DataAccess.GetEmployeeList();
+
+			toGrid.ItemsSource = fromTable.AsDataView();
+			return toGrid;
 		}
 
 		#endregion

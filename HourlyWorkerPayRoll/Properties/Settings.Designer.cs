@@ -22,5 +22,19 @@ namespace HourlyWorkerPayRoll.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Kat\\source\\repos\\FAL" +
+            "L-2021\\NETD-3202\\Labs\\HourlyWorkerPayRoll\\HourlyWorkerPayRoll\\WorkerDatabase.mdf" +
+            ";Integrated Security=True;Context Connection=False")]
+        public string settings {
+            get {
+                return ((string)(this["settings"]));
+            }
+            set {
+                this["settings"] = value;
+            }
+        }
     }
 }

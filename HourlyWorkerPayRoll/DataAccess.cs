@@ -15,7 +15,7 @@ using System.Data.SqlClient;
 
 namespace HourlyWorkerPayRoll
 {
-	class DataAccess : HourlyWorkerPay
+	internal class DataAccess
 	{
 
 		#region "Connection String"
@@ -46,11 +46,11 @@ namespace HourlyWorkerPayRoll
 			string returnValue = null;
 
 			// Look for myConnectionString in the connectionStrings section.
-			ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[1];
+			ConnectionStringSettings myConnectionString = ConfigurationManager.ConnectionStrings[1];
 
 			//// If found, return the connection string.
-			if (settings != null)
-				returnValue = settings.ConnectionString;
+			if (myConnectionString != null)
+				returnValue = myConnectionString.ConnectionString;
 
 			return returnValue;
 		}
