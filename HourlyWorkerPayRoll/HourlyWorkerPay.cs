@@ -11,8 +11,8 @@
 // This is being used as part of a piecework payroll application.
 
 
+using HandyControl.Tools;
 using System;
-using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
@@ -24,7 +24,6 @@ namespace HourlyWorkerPayRoll
 		#region "VARIABLE DECLARATIONS"
 
 		// Instance variables
-		//private string employeeName;
 		private string employeeFName;
 		private string employeeLName;
 		private int employeeMessages;
@@ -53,7 +52,7 @@ namespace HourlyWorkerPayRoll
 		/// </summary>
 		/// <param name="firstNameValue">the worker's first name</param>
 		/// <param name="lastNameValue">the worker's last name</param>
-		/// <param name="messageValue">a worker's number of messages sent</param>
+		/// <param name="messagesValue">a worker's number of messages sent</param>
 		public HourlyWorkerPay(string firstNameValue, string lastNameValue, string messagesValue)
 		{
 			// Validate and set the worker's name
@@ -123,6 +122,9 @@ namespace HourlyWorkerPayRoll
 					//convert calculation result  to decimal to pass to employeePay 
 					employeePay = Convert.ToDecimal(result);
 
+					//Add valid HourlyWorkerPayRoll object data to Database
+					InsertNewWorker(this);
+
 					//increase the number of Employees by 1
 					overallNumberOfEmployees++;
 
@@ -178,7 +180,7 @@ namespace HourlyWorkerPayRoll
 				if (!Regex.IsMatch(value.Trim(), @"^[a-zA-Z]+$"))
 				{
 					//When no alphabetic characters are found within input field, inform user of error
-					throw new ArgumentException("Worker name can only have alphabetical characters.", NameParameter);
+					throw new ArgumentException(message: "Worker name can only have alphabetical characters.", NameParameter);
 				}
 			}
 		}
@@ -195,21 +197,23 @@ namespace HourlyWorkerPayRoll
 			{
 				try
 				{
+					// Constants for acceptible message range
+					const int MinimumMessages = 1;
+					const int MaximumMessages = 15000;
 					//Prevent non-numerical values from being passed to messages
-					if (!int.TryParse(value, out var temp))
+					if (int.TryParse(value, out var temp))
 					{
-						//if not able to convert input to integer, it get's caught by formatexception but processed by argument exception
-						throw new ArgumentException(MessagesParameter, "Messages can only contain numerical values");
-					}
-
-					if (!(temp >= 15000))
-					{
-						employeeMessages = temp;
+						//Check if valid int is within acceptibe range
+						if (!(employeeMessages >= MinimumMessages && employeeMessages <= MaximumMessages))
+						{
+							throw new ArgumentOutOfRangeException(MessagesParameter,
+								message: $"Messages must be between {MinimumMessages} and {MaximumMessages}.");
+						}
 					}
 					else
 					{
-						throw new ArgumentException("Message sent value can NOT exceed or be equal to 15000",
-							MessagesParameter);
+						//if not able to convert input to integer, it get's caught by formatexception but processed by argument exception
+						throw new ArgumentException(MessagesParameter, "Messages can only contain numerical values");
 					}
 				}
 				catch (ArgumentNullException)
@@ -226,12 +230,6 @@ namespace HourlyWorkerPayRoll
 
 				}
 
-
-
-				//employeeMessages = Convert.ToInteger(value); // This line is dangerous and should probably never appear in your code. Can you explain why? Post about it on the Q&A board and I'll give you a stock.
-
-				/* It is "dangerous" because it is attempting to convert a string attribute of an object to an integer.
-				 Due to the nature of the attribute for the class, there is no way for the program to perform the conversion in this way, at least within the accessor/mutator of the attribute.A better method would be to convert it with an separate class method. OR use a try parse first to ensure the contents are numeric before attempting. Even then Convert.ToInt32() is a better option. */
 
 			}
 		}
@@ -251,7 +249,12 @@ namespace HourlyWorkerPayRoll
 		/// <returns>the overall total pay among all workers</returns>
 		public static decimal TotalPay
 		{
-			get { return overallPayroll; }
+			get
+			{
+				//obtain data from database and convert from string to decimal
+				overallPayroll = DataAccess.GetTotalPay().ConvertToDecimal();
+				return overallPayroll;
+			}
 		}
 
 		/// <summary>
@@ -260,7 +263,12 @@ namespace HourlyWorkerPayRoll
 		/// <returns>the overall number of workers</returns>
 		public static int TotalWorkers
 		{
-			get { return overallNumberOfEmployees; }
+			get
+			{
+				//obtain data from database and convert from string to integer
+				overallNumberOfEmployees = DataAccess.GetTotalEmployees().ConvertToInt();
+				return overallNumberOfEmployees;
+			}
 		}
 
 		/// <summary>
@@ -269,7 +277,12 @@ namespace HourlyWorkerPayRoll
 		/// <returns>the overall number of messages sent</returns>
 		public static int TotalMessages
 		{
-			get { return overallMessages; }
+			get
+			{
+				//obtain data from database and convert from string to integer
+				overallMessages = DataAccess.GetTotalMessages().ConvertToInt();
+				return overallMessages;
+			}
 		}
 
 		/// <summary>
@@ -301,6 +314,10 @@ namespace HourlyWorkerPayRoll
 			}
 		}
 
+		#region Class Methods
+
+
+
 		/// <summary>
 		/// Method to reset all attributes
 		/// for summary form
@@ -313,15 +330,24 @@ namespace HourlyWorkerPayRoll
 			overallNumberOfEmployees = 0;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public static DataGrid ShowDataGrid()
 		{
-			DataGrid toGrid = new DataGrid();
-			var fromTable = DataAccess.GetEmployeeList();
+			DataAccess.GetEmployeeList();
 
-			toGrid.ItemsSource = fromTable.AsDataView();
-			return toGrid;
+
+			//return toGrid;
 		}
 
+		public static void InsertNewWorker(HourlyWorkerPay newWorker)
+		{
+			DataAccess.InsertNewRecord(newWorker);
+		}
+
+		#endregion
 		#endregion
 
 	}

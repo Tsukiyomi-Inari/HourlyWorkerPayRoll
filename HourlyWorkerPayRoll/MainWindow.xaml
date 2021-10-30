@@ -61,32 +61,30 @@
 			BorderBrush="Transparent"
 			Background="Transparent"
 			/>
-						<TextBox
-			x:Name="textBoxWorkerNameFirst"
-			Grid.Row="0"
-			Grid.Column="1"
-			Width="122"
-			Margin="4,27,0,0"
-			HorizontalAlignment="Left"
-			VerticalAlignment="Top"
-			TextWrapping="Wrap"
-			ToolTip="Enter the first name of the workeer whose pay you are calculating"
-			TabIndex="0"
-			TextChanged="TextBoxChanged"
+						<WrapPanel x:Name="wrapPanelWorkerFullName" Grid.Column="1" HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Center">
+							<TextBox
+			  x:Name="textBoxWorkerNameFirst"
+			  Width="122"
+			  HorizontalAlignment="Left"
+			  VerticalAlignment="Top"
+			  TextWrapping="Wrap"
+			  ToolTip="Enter the first name of the workeer whose pay you are calculating"
+			  TabIndex="0"
+			  TextChanged="TextBoxChanged"
 			/>
 
-						<TextBox
-		  x:Name="textBoxWorkerNameLast"
-		  Width="122"
+							<TextBox
+			  x:Name="textBoxWorkerNameLast"
+			  Width="122"
 		  
-		  HorizontalAlignment="Left"
-		  VerticalAlignment="Top"
-		  TextWrapping="Wrap"
-		  ToolTip="Enter the last name of the workeer whose pay you are calculating"
-		  TabIndex="1"
-		  TextChanged="TextBoxChanged"
-		  Grid.Column="1" Margin="162,27,0,0"
+			  HorizontalAlignment="Left"
+			  VerticalAlignment="Top"
+			  TextWrapping="Wrap"
+			  ToolTip="Enter the last name of the workeer whose pay you are calculating"
+			  TabIndex="1"
+			  TextChanged="TextBoxChanged"
 			/>
+						</WrapPanel>
 						<Label 
 			x:Name="labelNameError"
 			Grid.Row="0"
@@ -130,11 +128,11 @@
 						<Label
 			x:Name="labelMessagesError"
 			Grid.Row="1"
-			Width="294"
+			Width="331"
 			Content=""
 			VerticalAlignment="Bottom"
 			HorizontalAlignment="Left"
-			Margin="132,0,0,73" 
+			Margin="173,0,0,73" 
 			Grid.RowSpan="2" Grid.ColumnSpan="2"
 			Foreground="Crimson"
 			BorderBrush="Transparent"
@@ -395,16 +393,16 @@
 			</TabItem>
 			<TabItem x:Name="tabEmployeeList" Header="_Employee List " Background="AliceBlue" ToolTip="View Employee List Tab"  />
 			<Grid>
-			<DataGrid x:Name="dataGridEmployeeList" VerticalGridLinesBrush="DimGray" HorizontalGridLinesBrush="DimGray">
-				<DataGrid.Columns>
-					<DataGridTextColumn Header="ID"/>
-					<DataGridTextColumn Header="First Name"/>
-					<DataGridTextColumn Header="Last Name"  />
-					<DataGridTextColumn Header="Messages" />
-					<DataGridTextColumn Header="Pay" />
-					<DataGridTextColumn Header="Entry Date" />
-				</DataGrid.Columns>
-			</DataGrid>
+				<DataGrid x:Name="dataGridEmployeeList" VerticalGridLinesBrush="DimGray" HorizontalGridLinesBrush="DimGray">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="ID"/>
+						<DataGridTextColumn Header="First Name"/>
+						<DataGridTextColumn Header="Last Name"  />
+						<DataGridTextColumn Header="Messages" />
+						<DataGridTextColumn Header="Pay" />
+						<DataGridTextColumn Header="Entry Date" />
+					</DataGrid.Columns>
+				</DataGrid>
 			</Grid>
 		</TabControl>
 		<!--Row 1: Contains the Exit button, available to all tabs.-->

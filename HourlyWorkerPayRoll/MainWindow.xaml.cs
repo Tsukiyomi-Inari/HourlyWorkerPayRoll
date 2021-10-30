@@ -108,13 +108,14 @@ namespace HourlyWorkerPayRoll
 			//To catch argumentexceptions for responses to predicted issues within HourlyWorkerPay class
 			catch (ArgumentException error)
 			{
-				//todo: KEEP OR CHANGE TO REGULAR VALIDATION HANDLING 
+				//todo: KEEP OR CHANGE TO REGULAR VALIDATION HANDLING ???
 				switch (error.ParamName)
 				{
 					//Check other parameters
 					case HourlyWorkerPay.NameParameter:
 						labelNameError.Content = error.Message;
 						ShowRedAngryError(textBoxWorkerNameFirst);
+						ShowRedAngryError(textBoxWorkerNameLast);
 						break;
 					case HourlyWorkerPay.MessagesParameter:
 						labelMessagesError.Content = error.Message;
@@ -144,13 +145,14 @@ namespace HourlyWorkerPayRoll
 		private void LoadSummary()
 		{
 
-			textBoxTotalPay.Text = DataAccess.GetTotalPay().ToString();
-			textBoxTotalMessages.Text = HourlyWorkerPay.TotalMessages.ToString();
-			textBoxTotalWorkers.Text = HourlyWorkerPay.TotalWorkers.ToString();
+			textBoxTotalPay.Text = DataAccess.GetTotalPay();
+			textBoxTotalMessages.Text = DataAccess.GetTotalMessages();
+			textBoxTotalWorkers.Text = DataAccess.GetTotalEmployees();
 
 			if (HourlyWorkerPay.TotalWorkers != 0)
 			{
-				textBoxAveragePay.Text = (HourlyWorkerPay.TotalPay / HourlyWorkerPay.TotalWorkers).ToString("C");
+				//textBoxAveragePay.Text = (HourlyWorkerPay.TotalPay / HourlyWorkerPay.TotalWorkers).ToString("C");
+				textBoxAveragePay.Text = ;
 			}
 
 		}
