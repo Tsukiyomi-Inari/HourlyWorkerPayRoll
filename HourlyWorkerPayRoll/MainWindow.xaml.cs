@@ -1,14 +1,14 @@
 ﻿/*MainWindow.xaml.cs
  *
- * Title: Main Application Window
+ * Title: Main Application 
  *
  * Author: Katherine Bellman
  * Course: NETD 3202
  * Date: October 26th 2021
  *
+ * Description: Main application functionality file
  */
 
-using HandyControl.Tools.Extension;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,8 +22,6 @@ namespace HourlyWorkerPayRoll
 		public MainWindow()
 		{
 			InitializeComponent();
-			LoadSqlData();
-			//LoadSummary();
 
 			//// Clock functionality reference :https://www.c-sharpcorner.com/blogs/digital-clock-in-wpf1
 			Timer.Tick += new EventHandler(DisplayClock);
@@ -31,6 +29,7 @@ namespace HourlyWorkerPayRoll
 			Timer.Interval = new TimeSpan(00, 00, 01);
 
 			Timer.Start();
+			StatusBarUpdate("Application started...Clock loaded.");
 		}
 
 		//==ALL EVENT HANDLERS===========================================
@@ -89,8 +88,10 @@ namespace HourlyWorkerPayRoll
 				//Show attributes of current worker to user, as input is valid
 				else
 				{
-					//output strings of calculated attributes into coresponding textboxes with valid output format
+					//output strings of calculated attribute into coresponding textbox with valid output format
 					textBoxWorkerTotalPay.Text = worker.Pay.ToString("C");
+					StatusBarUpdate($"Worker {worker.FirstName + " " + worker.LastName} successfully added.");
+
 				}
 
 				//Disable calculate button & input fields
@@ -104,11 +105,11 @@ namespace HourlyWorkerPayRoll
 
 				//apply focus to clear button
 				buttonClear.Focus();
+				StatusBarUpdate("Click clear for additional entries.");
 			}
 			//To catch argumentexceptions for responses to predicted issues within HourlyWorkerPay class
 			catch (ArgumentException error)
 			{
-				//todo: KEEP OR CHANGE TO REGULAR VALIDATION HANDLING ???
 				switch (error.ParamName)
 				{
 					//Check other parameters
@@ -116,10 +117,12 @@ namespace HourlyWorkerPayRoll
 						labelNameError.Content = error.Message;
 						ShowRedAngryError(textBoxWorkerNameFirst);
 						ShowRedAngryError(textBoxWorkerNameLast);
+						StatusBarUpdate("Error: Check Worker Name fields.");
 						break;
 					case HourlyWorkerPay.MessagesParameter:
 						labelMessagesError.Content = error.Message;
 						ShowRedAngryError(textBoxMessagesSent);
+						StatusBarUpdate("Error: Check Messages Sent field.");
 						break;
 				}
 			}
@@ -139,23 +142,24 @@ namespace HourlyWorkerPayRoll
 		#region SUMMARY CONTROLS _ EVENT HANDLERS
 
 
-		/// <summary>
-		/// Loads data for summary totals 
-		/// </summary>
-		private void LoadSummary()
-		{
+		///// <summary>
+		///// Loads data for summary totals
+		///// obtained from property methods, that obtain
+		///// relevant data from database
+		///// </summary>
+		//private void LoadSummary()
+		//{
+		//	textBoxTotalPay.Text = DataAccess.GetTotalPay();
+		//	textBoxTotalMessages.Text = DataAccess.GetTotalMessages();
+		//	textBoxTotalWorkers.Text = DataAccess.GetTotalEmployees();
 
-			textBoxTotalPay.Text = DataAccess.GetTotalPay();
-			textBoxTotalMessages.Text = DataAccess.GetTotalMessages();
-			textBoxTotalWorkers.Text = DataAccess.GetTotalEmployees();
+		//	if (HourlyWorkerPay.TotalWorkers != 0)
+		//	{
+		//		//Obtains calculated average pay from property method, calculated from database data
+		//		textBoxAveragePay.Text = HourlyWorkerPay.AveragePay.ToString("C");
+		//	}
 
-			if (HourlyWorkerPay.TotalWorkers != 0)
-			{
-				//textBoxAveragePay.Text = (HourlyWorkerPay.TotalPay / HourlyWorkerPay.TotalWorkers).ToString("C");
-				textBoxAveragePay.Text = ;
-			}
-
-		}
+		//}
 
 		/// <summary>
 		/// Event handler for Summary Reset button
@@ -178,6 +182,8 @@ namespace HourlyWorkerPayRoll
 			textBoxAveragePay.Text = "$0.00";
 			textBoxTotalMessages.Text = "0";
 			textBoxTotalWorkers.Text = "0";
+
+			StatusBarUpdate("Summary tab view values have been reset.");
 		}
 
 		#region EMPLOYEE LIST TAB EVENT HANDLERS
@@ -218,6 +224,37 @@ namespace HourlyWorkerPayRoll
 			statusBarClock.Content = new DateTime(time.Ticks).ToString("hh:mm:ss tt");
 		}
 
+		/// <summary>
+		/// When a selected tab is changed, it will generate
+		/// the data for the selected tab or other functional actions
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void TabChanged(object sender, SelectionChangedEventArgs e)
+		{
+			//When Entry tab is accessed, focus set to clear button
+			if (Equals(tabControlInterface.SelectedItem, tabPayrollEntry))
+			{
+				buttonClear.Focus();
+				StatusBarUpdate("Viewing Payroll Entry Tab");
+			}
+			//When Summary tab is accessed, database values populate read-only output fields
+			else if (Equals(tabControlInterface.SelectedItem, tabSummary))
+			{
+				textBoxAveragePay.Text = HourlyWorkerPay.AveragePay.ToString("C");
+				textBoxTotalMessages.Text = HourlyWorkerPay.TotalMessages.ToString();
+				textBoxTotalPay.Text = HourlyWorkerPay.TotalPay.ToString("C");
+				textBoxTotalWorkers.Text = HourlyWorkerPay.TotalWorkers.ToString();
+				StatusBarUpdate("Viewing Summary tab.");
+			}
+			//When Employee list tab is accessed, datagrid view obtains data from the database
+			else if (Equals(tabControlInterface.SelectedItem, tabEmployeeList))
+			{
+				dataGridEmployeeList.ItemsSource = DataAccess.GetEmployeeList().DefaultView;
+				StatusBarUpdate("Viewing employee tab.");
+			}
+		}
+
 		#endregion
 		#endregion
 		//=END===ALL EVENT HANDLERS =====================================
@@ -248,6 +285,8 @@ namespace HourlyWorkerPayRoll
 
 			//Set focus to first user input textbox
 			textBoxWorkerNameFirst.Focus();
+
+			StatusBarUpdate("Entry tab cleared, ready for new entry.");
 		}
 
 		/// <summary>
@@ -293,16 +332,19 @@ namespace HourlyWorkerPayRoll
 			//clear error message labels
 			labelNameError.Content = string.Empty;
 			labelMessagesError.Content = string.Empty;
+
 		}
 
-		private void LoadSqlData()
+
+		/// <summary>
+		/// When called, it changes the status label
+		/// within status bar to passed status message
+		/// </summary>
+		/// <param name="status">Application status</param>
+		private void StatusBarUpdate(string status)
 		{
-			DataGrid temp = new();
-			temp = HourlyWorkerPay.ShowDataGrid();
-			dataGridEmployeeList = new DataGrid();
-			dataGridEmployeeList.Show();
+			labelStatus.Content = status;
 		}
-
 
 		#endregion //===============================================
 		//=END===FORM METHODS ===========================================

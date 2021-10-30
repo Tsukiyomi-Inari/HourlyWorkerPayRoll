@@ -9,6 +9,9 @@
                 <hc:ThemeResources/>
                 <hc:Theme/>
             </ResourceDictionary.MergedDictionaries>
+			<DataTemplate x:Key="DataGridItemTemplate1">
+				<Grid/>
+			</DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

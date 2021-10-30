@@ -2,6 +2,7 @@
 //         Title: IncInc Payroll (Piecework)
 // Last Modified: October 29th 2021
 //    Written By: Katherine Bellman
+//
 // Adapted from PieceworkWorker by Kyle Chapman, September 2019
 // 
 // This is a class representing individual worker objects. Each stores
@@ -13,8 +14,8 @@
 
 using HandyControl.Tools;
 using System;
+using System.Data;
 using System.Text.RegularExpressions;
-using System.Windows.Controls;
 
 namespace HourlyWorkerPayRoll
 {
@@ -62,6 +63,9 @@ namespace HourlyWorkerPayRoll
 			this.Messages = messagesValue;
 			// Calculcate the worker's pay and update all summary values
 			FindPay();
+
+			//Add valid HourlyWorkerPayRoll object data to Database
+			InsertNewWorker(this);
 		}
 
 		/// <summary>
@@ -103,8 +107,6 @@ namespace HourlyWorkerPayRoll
 				//prevents updating values on failed parse
 				else
 				{
-					//Add messages sent to overall total messages
-					overallMessages += employeeMessages;
 
 					//loop through to arrays to find correct range and return the associated rate from second array
 					for (int counter = 0; counter < messagesSent.Length; counter++)
@@ -122,14 +124,6 @@ namespace HourlyWorkerPayRoll
 					//convert calculation result  to decimal to pass to employeePay 
 					employeePay = Convert.ToDecimal(result);
 
-					//Add valid HourlyWorkerPayRoll object data to Database
-					InsertNewWorker(this);
-
-					//increase the number of Employees by 1
-					overallNumberOfEmployees++;
-
-					//Add current worker pay to overall payroll value
-					overallPayroll += employeePay;
 				}
 			}
 			catch (ArgumentException)
@@ -281,6 +275,7 @@ namespace HourlyWorkerPayRoll
 			{
 				//obtain data from database and convert from string to integer
 				overallMessages = DataAccess.GetTotalMessages().ConvertToInt();
+
 				return overallMessages;
 			}
 		}
@@ -331,18 +326,18 @@ namespace HourlyWorkerPayRoll
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the database employee list to populate
+		/// UI DataGrid
 		/// </summary>
-		/// <returns></returns>
-		public static DataGrid ShowDataGrid()
+		internal static DataTable ShowDataGrid
 		{
-			DataAccess.GetEmployeeList();
-
-
-			//return toGrid;
+			get
+			{
+				return DataAccess.GetEmployeeList();
+			}
 		}
 
-		public static void InsertNewWorker(HourlyWorkerPay newWorker)
+		private static void InsertNewWorker(HourlyWorkerPay newWorker)
 		{
 			DataAccess.InsertNewRecord(newWorker);
 		}
