@@ -21,15 +21,18 @@
            Title="Incorporeal Incorporated Payroll"
            WindowStartupLocation="CenterScreen"
            ShowTitle="True"
-           MinHeight="480" Height="500"
-           MinWidth="480"  Width="600"
-           Icon="/IncIncLogo.png"
-		   Background="#FFF2F2F2" >
-	
-	<!--<hc:Window.NonClientAreaContent>
-		<Grid></Grid>
-	</hc:Window.NonClientAreaContent>-->
-		
+           MinHeight="440" Height="440"
+           MinWidth="650"  Width="650"
+           Icon="/IncIncLogo 376x270.ico"
+		   Background="#FFF2F2F2"
+           BorderBrush="LightSteelBlue"
+           WindowStyle="SingleBorderWindow"
+            >
+
+	<hc:Window.NonClientAreaContent>
+		<Border BorderBrush="LightSteelBlue" />
+	</hc:Window.NonClientAreaContent>
+
 	<Grid Background="LightSteelBlue">
 		<!--Define rows for the outermost Grid, containing the tab control.-->
 		<Grid.RowDefinitions>
@@ -45,7 +48,9 @@
 				<hc:SimplePanel Background="LightSteelBlue">
 					<Grid>
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition />
+							<ColumnDefinition Width="1*" />
+							<ColumnDefinition Width="1*"/>
+							<ColumnDefinition Width="1*" />
 							<ColumnDefinition />
 						</Grid.ColumnDefinitions>
 
@@ -58,15 +63,14 @@
 						</Grid.RowDefinitions>
 
 						<Label
-			Margin="4"
-			HorizontalAlignment="Right"
-			VerticalAlignment="Center"
+			Margin="10,0,0,0"
+			HorizontalAlignment="Left"
 			Content="Worker Name:"
 			Target="{Binding ElementName=textBoxWorkerNameFirst}"
 			BorderBrush="Transparent"
-			Background="Transparent"
+			Background="Transparent" Grid.Column="1" Width="153"
 			/>
-						<WrapPanel x:Name="wrapPanelWorkerFullName" Grid.Column="1" HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Center">
+						<WrapPanel x:Name="wrapPanelWorkerFullName" Grid.Column="2" Grid.ColumnSpan="2" Width="245" HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Center" >
 							<TextBox
 			  x:Name="textBoxWorkerNameFirst"
 			  Width="122"
@@ -77,17 +81,16 @@
 			  TabIndex="0"
 			  TextChanged="TextBoxChanged"
 			/>
-
 							<TextBox
 			  x:Name="textBoxWorkerNameLast"
-			  Width="122"
-		  
+			  Width="112"
+			  Grid.ColumnSpan="2"
 			  HorizontalAlignment="Left"
-			  VerticalAlignment="Top"
+			  VerticalAlignment="Center"
 			  TextWrapping="Wrap"
 			  ToolTip="Enter the last name of the workeer whose pay you are calculating"
 			  TabIndex="1"
-			  TextChanged="TextBoxChanged"
+			  TextChanged="TextBoxChanged" RenderTransformOrigin="0.721,0.532"
 			/>
 						</WrapPanel>
 						<Label 
@@ -98,7 +101,7 @@
 			VerticalAlignment="Bottom"
 			HorizontalAlignment="Left"
 			Margin="132,0,0,73"  
-			Grid.RowSpan="2" Grid.ColumnSpan="2"
+			Grid.RowSpan="2" Grid.ColumnSpan="3"
 			Foreground="Crimson"
 			BorderBrush="Transparent"
 			Background="Transparent"
@@ -107,23 +110,22 @@
 						<!--  main_Row1  -->
 						<Label
 			Grid.Row="1"
-			Grid.Column="0"
-			Margin="4"
-			HorizontalAlignment="Right"
-			VerticalAlignment="Center"
+			Grid.Column="1"
+			Margin="10,0,0,0"
+			HorizontalAlignment="Left"
 			Content="Messages Sent:"
 			Target="{Binding ElementName=textBoxMessagesSent}"
 			BorderBrush="Transparent"
-			Background="Transparent"
+			Background="Transparent" Width="153"
 			/>
 						<TextBox
 			x:Name="textBoxMessagesSent"
 			Grid.Row="1"
-			Grid.Column="1"
+			Grid.Column="2"
 			Width="200"
-			Margin="4,0, 0,5"
+			Margin="4,19,0,0"
 			HorizontalAlignment="Left"
-			VerticalAlignment="Center"
+			VerticalAlignment="Top"
 			TextWrapping="Wrap"
 			ToolTip="Enter the number of messages worker sent" 
 			TabIndex="2"
@@ -137,32 +139,31 @@
 			Content=""
 			VerticalAlignment="Bottom"
 			HorizontalAlignment="Left"
-			Margin="173,0,0,73" 
+			Margin="40,0,0,73" 
 			Grid.RowSpan="2" Grid.ColumnSpan="2"
 			Foreground="Crimson"
 			BorderBrush="Transparent"
-			Background="Transparent"
+			Background="Transparent" Grid.Column="1"
 			/>
 
 						<!--  main_Row2  -->
 						<Label
 			Grid.Row="2"
-			Grid.Column="0"
-			Margin="4"
-			HorizontalAlignment="Right"
-			VerticalAlignment="Center"
+			Grid.Column="1"
+			Margin="40,0,0,0"
+			HorizontalAlignment="Left"
 			Content="Total Pay:"
 			Target="{Binding ElementName=textBoxWorkerTotalPay}" 
 			BorderBrush="Transparent"
-			Background="Transparent"
+			Background="Transparent" Width="123"
 			/>
 
 						<TextBox
 			x:Name="textBoxWorkerTotalPay"
 			Grid.Row="2"
-			Grid.Column="1"
+			Grid.Column="2"
 			Width="200"
-			Margin="4"
+			Margin="4,0,0,0"
 			HorizontalAlignment="Left"
 			VerticalAlignment="Center"
 			TextWrapping="Wrap"
@@ -176,30 +177,31 @@
 						<Button
 			x:Name="buttonCalculate"
 			Grid.Row="3"
-			Grid.Column="0"
-			Margin="5,15,75,15"
+			Margin="28,5,46,5"
 			Content="_Calculate Pay"
 			IsDefault="True"
 			ToolTip="Click to calculate current worker's pay"
 			TabIndex="3"
-			Click="CalculateClick"
-			Width="200" 
-			Height="67" 
-			Background="AliceBlue"
+			Click="CalculateClick" 
+			Background="AliceBlue" 
+			Grid.ColumnSpan="2" 
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch" Width="276" MaxWidth="276" MaxHeight="30" Height="30"
 			/>
 						<Button
-			x:Name="buttonClear"
-			Grid.Row="3"
-			Grid.Column="1"
-			Margin="75,15,7,15"
-			Content="C_lear"
-			IsCancel="True"
-			ToolTip="Click to reset all fields to their default state" 
-			TabIndex="4"
-			Click="ClearClick"
-			Background="AliceBlue"
-			Width="200" 
-			Height="67" 
+		  x:Name="buttonClear"
+		  Grid.Row="3"
+		  Grid.Column="2"
+		  Margin="24,5,25,5"
+		  Content="C_lear"
+		  IsCancel="True"
+		  ToolTip="Click to reset all fields to their default state" 
+		  TabIndex="4"
+		  Click="ClearClick"
+		  Background="AliceBlue"
+		  Grid.ColumnSpan="2"
+		  HorizontalAlignment="Stretch" 
+		  VerticalAlignment="Stretch" MaxWidth="276" MaxHeight="30" 
 			/>
 					</Grid>
 				</hc:SimplePanel>
@@ -400,7 +402,7 @@
 
 				<hc:SimplePanel Background="LightSteelBlue">
 
-				<DataGrid  x:Name="dataGridEmployeeList"   Background="GhostWhite" AlternatingRowBackground="AliceBlue" VerticalGridLinesBrush="LightSteelBlue" HorizontalGridLinesBrush="LightSteelBlue" >
+					<DataGrid  x:Name="dataGridEmployeeList" BorderBrush="LightSteelBlue"  Background="AliceBlue" AlternatingRowBackground="LightSteelBlue" VerticalGridLinesBrush="SlateGray" HorizontalGridLinesBrush="SlateGray" >
 						<DataGrid.RowHeaderStyle>
 							<Style/>
 						</DataGrid.RowHeaderStyle>
