@@ -1,6 +1,6 @@
 ﻿// DataAccess.cs
 //         Title: DataAccess - Data Access Layer for Piecework Payroll
-// Last Modified: October 26th 2021
+// Last Modified: October 31th 2021
 //    Written By: Katherine Bellman
 //
 //
@@ -113,8 +113,6 @@ namespace HourlyWorkerPayRoll
 			// Create new SQL command and assign it paramaters
 			SqlCommand command = new SqlCommand("INSERT INTO Entries VALUES(@firstName, @lastName, @messages, @pay, @entryDate)", dbConnection);
 
-			// TO DO The next two lines assume workers only have 1 name. Read your requirements carefully!
-			//TODO: string of name will need to be split for entry into SQL
 			command.Parameters.AddWithValue("@firstName", insertWorker.FirstName);
 			command.Parameters.AddWithValue("@lastName", insertWorker.LastName);
 			command.Parameters.AddWithValue("@messages", insertWorker.Messages);
@@ -230,6 +228,38 @@ namespace HourlyWorkerPayRoll
 				dbConnection.Close();
 			}
 		}
+
+
+		/// <summary>
+		/// Returns the average pay amoung the number of workers
+		/// from the database 
+		/// </summary>
+		/// <returns>Average Pay of Workers</returns>
+		internal static string GetAveragePay()
+		{
+			// Declare the SQL connection and the SQL command
+			SqlConnection dbConnection = new SqlConnection(GetConnectionString());
+
+			SqlCommand command = new SqlCommand("SELECT SUM(Pay)/COUNT(EntryId) FROM Entries", dbConnection);
+
+			// Try to open a connection to the database and read the total. Return result.
+			try
+			{
+				dbConnection.Open();
+				return command.ExecuteScalar().ToString();
+			}
+			catch (Exception ex)
+			{
+				// If there is an error, re-throw the exception to be handled by the presentation tier.
+				// (You could also just do error messaging here but that's not as nice.)
+				throw ex;
+			}
+			finally
+			{
+				dbConnection.Close();
+			}
+		}
+
 
 		#endregion
 

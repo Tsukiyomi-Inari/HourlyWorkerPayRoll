@@ -18,17 +18,21 @@ namespace HourlyWorkerPayRoll
 {
 	public partial class MainWindow
 	{
+		static bool StartUpIsFalse = true;
+		//Obtains system time and interval data for clock
 		System.Windows.Threading.DispatcherTimer Timer = new();
 		public MainWindow()
 		{
 			InitializeComponent();
-
+			//set to false = is startup
+			StartUpIsFalse = false;
+			//Start the dynamic clock on status bar
 			//// Clock functionality reference :https://www.c-sharpcorner.com/blogs/digital-clock-in-wpf1
 			Timer.Tick += new EventHandler(DisplayClock);
-
 			Timer.Interval = new TimeSpan(00, 00, 01);
-
 			Timer.Start();
+
+			// Change current status
 			StatusBarUpdate("Application started...Clock loaded.");
 		}
 
@@ -105,7 +109,6 @@ namespace HourlyWorkerPayRoll
 
 				//apply focus to clear button
 				buttonClear.Focus();
-				StatusBarUpdate("Click clear for additional entries.");
 			}
 			//To catch argumentexceptions for responses to predicted issues within HourlyWorkerPay class
 			catch (ArgumentException error)
@@ -142,24 +145,6 @@ namespace HourlyWorkerPayRoll
 		#region SUMMARY CONTROLS _ EVENT HANDLERS
 
 
-		///// <summary>
-		///// Loads data for summary totals
-		///// obtained from property methods, that obtain
-		///// relevant data from database
-		///// </summary>
-		//private void LoadSummary()
-		//{
-		//	textBoxTotalPay.Text = DataAccess.GetTotalPay();
-		//	textBoxTotalMessages.Text = DataAccess.GetTotalMessages();
-		//	textBoxTotalWorkers.Text = DataAccess.GetTotalEmployees();
-
-		//	if (HourlyWorkerPay.TotalWorkers != 0)
-		//	{
-		//		//Obtains calculated average pay from property method, calculated from database data
-		//		textBoxAveragePay.Text = HourlyWorkerPay.AveragePay.ToString("C");
-		//	}
-
-		//}
 
 		/// <summary>
 		/// Event handler for Summary Reset button
@@ -168,9 +153,6 @@ namespace HourlyWorkerPayRoll
 		/// <param name="e"></param>
 		private void ResetSummaryClick(object sender, RoutedEventArgs e)
 		{
-			//reset all summary variables within class
-			HourlyWorkerPay.ResetSummary();
-
 			//clear textboxes
 			textBoxTotalPay.Clear();
 			textBoxAveragePay.Clear();
@@ -232,28 +214,52 @@ namespace HourlyWorkerPayRoll
 		/// <param name="e"></param>
 		private void TabChanged(object sender, SelectionChangedEventArgs e)
 		{
+
 			//When Entry tab is accessed, focus set to clear button
 			if (Equals(tabControlInterface.SelectedItem, tabPayrollEntry))
 			{
 				buttonClear.Focus();
-				StatusBarUpdate("Viewing Payroll Entry Tab");
+				//Do not show status update at start unless...
+				if (StartUpIsFalse == true || buttonCalculate.IsPressed)
+				{
+					StatusBarUpdate("Viewing Payroll Entry Tab");
+				}
+
+				//while in on tab, change tab background brush
+				tabPayrollEntry.Background = Brushes.AliceBlue;
+				//When not on tab, change tab background brush 
+				if (!tabPayrollEntry.IsSelected) { tabPayrollEntry.Background = Brushes.LightSteelBlue; }
 			}
+
 			//When Summary tab is accessed, database values populate read-only output fields
 			else if (Equals(tabControlInterface.SelectedItem, tabSummary))
 			{
-				textBoxAveragePay.Text = HourlyWorkerPay.AveragePay.ToString("C");
+				textBoxTotalWorkers.Text = HourlyWorkerPay.TotalWorkers.ToString("####");
 				textBoxTotalMessages.Text = HourlyWorkerPay.TotalMessages.ToString();
 				textBoxTotalPay.Text = HourlyWorkerPay.TotalPay.ToString("C");
-				textBoxTotalWorkers.Text = HourlyWorkerPay.TotalWorkers.ToString();
+				textBoxAveragePay.Text = HourlyWorkerPay.AveragePay.ToString("C");
 				StatusBarUpdate("Viewing Summary tab.");
+
+				//while in on tab, change tab background brush
+				tabSummary.Background = Brushes.AliceBlue;
+				//When not on tab, change tab background brush 
+				if (!tabSummary.IsSelected) { tabSummary.Background = Brushes.LightSteelBlue; }
 			}
+
 			//When Employee list tab is accessed, datagrid view obtains data from the database
 			else if (Equals(tabControlInterface.SelectedItem, tabEmployeeList))
 			{
 				dataGridEmployeeList.ItemsSource = DataAccess.GetEmployeeList().DefaultView;
 				StatusBarUpdate("Viewing employee tab.");
+
+				//while in on tab, change tab background brush
+				tabEmployeeList.Background = Brushes.AliceBlue;
+				//When not on tab, change tab background brush 
+				if (!tabSummary.IsSelected) { tabSummary.Background = Brushes.LightSteelBlue; }
 			}
 		}
+
+
 
 		#endregion
 		#endregion
@@ -345,6 +351,8 @@ namespace HourlyWorkerPayRoll
 		{
 			labelStatus.Content = status;
 		}
+
+
 
 		#endregion //===============================================
 		//=END===FORM METHODS ===========================================

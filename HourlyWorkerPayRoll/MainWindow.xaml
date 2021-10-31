@@ -7,7 +7,7 @@
 		
 		Description: Main window UI for HourlyWorkerPay with tabed view and database generated datagrid view
 		
-		Modified: October 30th
+		Modified: October 31th 2021
 	-->
 <hc:Window
            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -40,11 +40,23 @@
 			<RowDefinition Height="35" />
 			<RowDefinition Height="35" />
 		</Grid.RowDefinitions>
-
-
+		<!---==============================================||||  TAB CONTROL START  ||||========================================================-->
 		<!--Row 0: Contains the TabControl.-->
-		<TabControl x:Name="tabControlInterface"  Background="#FFF2F2F2" Foreground="LightBlue" SelectionChanged="TabChanged"  >
-			<TabItem x:Name="tabPayrollEntry" Header="_Payroll Entry" Background="AliceBlue" ToolTip="View Payroll Entry Tab"   >
+		<TabControl 
+			x:Name="tabControlInterface"  
+			Background="#FFF2F2F2" 
+			Foreground="Azure" 
+			SelectionChanged="TabChanged" >
+			<!---==============================================  PAYROLL ENTRY TAB  ===============================================================-->
+			<TabItem 
+				x:Name="tabPayrollEntry"  
+				hc:BackgroundSwitchElement.MouseDownBackground="AliceBlue" 
+				Background="LightSteelBlue"  
+				Style="{DynamicResource BaseStyle}" 
+				FocusVisualStyle="{DynamicResource BaseStyle}" 
+				Header="_Payroll Entry"  
+				ToolTip="View Payroll Entry Tab" 
+				FontSize="16" >
 				<hc:SimplePanel Background="LightSteelBlue">
 					<Grid>
 						<Grid.ColumnDefinitions>
@@ -68,9 +80,18 @@
 			Content="Worker Name:"
 			Target="{Binding ElementName=textBoxWorkerNameFirst}"
 			BorderBrush="Transparent"
-			Background="Transparent" Grid.Column="1" Width="153"
+			Background="Transparent" 
+			Grid.Column="1" 
+			Width="153"
 			/>
-						<WrapPanel x:Name="wrapPanelWorkerFullName" Grid.Column="2" Grid.ColumnSpan="2" Width="245" HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Center" >
+						<WrapPanel 
+							x:Name="wrapPanelWorkerFullName" 
+							Grid.Column="2" 
+							Grid.ColumnSpan="2" 
+							Width="245" 
+							HorizontalAlignment="Left" 
+							Orientation="Horizontal" 
+							VerticalAlignment="Center" >
 							<TextBox
 			  x:Name="textBoxWorkerNameFirst"
 			  Width="122"
@@ -90,21 +111,25 @@
 			  TextWrapping="Wrap"
 			  ToolTip="Enter the last name of the workeer whose pay you are calculating"
 			  TabIndex="1"
-			  TextChanged="TextBoxChanged" RenderTransformOrigin="0.721,0.532"
+			  TextChanged="TextBoxChanged" 
+			  RenderTransformOrigin="0.721,0.532" 
+			  Margin="5,0,0,0"
 			/>
 						</WrapPanel>
 						<Label 
 			x:Name="labelNameError"
 			Grid.Row="0"
-			Width="294"
 			Content=""
-			VerticalAlignment="Bottom"
-			HorizontalAlignment="Left"
-			Margin="132,0,0,73"  
-			Grid.RowSpan="2" Grid.ColumnSpan="3"
+			Margin="50,60,0,0"  
+			Grid.RowSpan="2" 
+			Grid.ColumnSpan="3"
 			Foreground="Crimson"
 			BorderBrush="Transparent"
-			Background="Transparent"
+			Background="Transparent" 
+			 VerticalAlignment="Top"
+			Width="372" 
+			Grid.Column="1" 
+			HorizontalAlignment="Left"
 			/>
 
 						<!--  main_Row1  -->
@@ -122,28 +147,31 @@
 			x:Name="textBoxMessagesSent"
 			Grid.Row="1"
 			Grid.Column="2"
-			Width="200"
+			Width="240"
 			Margin="4,19,0,0"
 			HorizontalAlignment="Left"
 			VerticalAlignment="Top"
 			TextWrapping="Wrap"
 			ToolTip="Enter the number of messages worker sent" 
 			TabIndex="2"
-			TextChanged="TextBoxChanged"
+			TextChanged="TextBoxChanged" 
+			Grid.ColumnSpan="2"
 			/>
 
 						<Label
 			x:Name="labelMessagesError"
 			Grid.Row="1"
-			Width="331"
+			Width="372"
 			Content=""
-			VerticalAlignment="Bottom"
-			HorizontalAlignment="Left"
-			Margin="40,0,0,73" 
-			Grid.RowSpan="2" Grid.ColumnSpan="2"
+			VerticalAlignment="Top"
+			Margin="50,54,0,0" 
+			Grid.RowSpan="2"
 			Foreground="Crimson"
 			BorderBrush="Transparent"
-			Background="Transparent" Grid.Column="1"
+			Background="Transparent" 
+			Grid.Column="1"
+			Grid.ColumnSpan="3" 
+			HorizontalAlignment="Left"
 			/>
 
 						<!--  main_Row2  -->
@@ -155,14 +183,15 @@
 			Content="Total Pay:"
 			Target="{Binding ElementName=textBoxWorkerTotalPay}" 
 			BorderBrush="Transparent"
-			Background="Transparent" Width="123"
+			Background="Transparent" 
+			Width="123"
 			/>
 
 						<TextBox
 			x:Name="textBoxWorkerTotalPay"
 			Grid.Row="2"
 			Grid.Column="2"
-			Width="200"
+			Width="241"
 			Margin="4,0,0,0"
 			HorizontalAlignment="Left"
 			VerticalAlignment="Center"
@@ -170,14 +199,15 @@
 			IsReadOnly="True"
 			ToolTip="Worker's calculated total pay" 
 			Text="$0.00" 
-			Background="#FFDEDEDE" 
+			Background="#FFEFEFEF" 
+			Grid.ColumnSpan="2" 
 			/>
 
 						<!--  main_Row3  -->
 						<Button
 			x:Name="buttonCalculate"
 			Grid.Row="3"
-			Margin="28,5,46,5"
+			Margin="25,5,25,5"
 			Content="_Calculate Pay"
 			IsDefault="True"
 			ToolTip="Click to calculate current worker's pay"
@@ -186,13 +216,14 @@
 			Background="AliceBlue" 
 			Grid.ColumnSpan="2" 
 			HorizontalAlignment="Stretch"
-			VerticalAlignment="Stretch" Width="276" MaxWidth="276" MaxHeight="30" Height="30"
+			VerticalAlignment="Stretch" 
+			Height="50" FontSize="16"
 			/>
 						<Button
 		  x:Name="buttonClear"
 		  Grid.Row="3"
 		  Grid.Column="2"
-		  Margin="24,5,25,5"
+		  Margin="25,14,25,14"
 		  Content="C_lear"
 		  IsCancel="True"
 		  ToolTip="Click to reset all fields to their default state" 
@@ -201,13 +232,33 @@
 		  Background="AliceBlue"
 		  Grid.ColumnSpan="2"
 		  HorizontalAlignment="Stretch" 
-		  VerticalAlignment="Stretch" MaxWidth="276" MaxHeight="30" 
+		  VerticalAlignment="Stretch" 
+		  Height="50" 
+		  FontSize="16" 
 			/>
+						<Image 
+							Margin="10,0,0,46" 
+							Source="/IncIncLogo.png" 
+							HorizontalAlignment="Left" 
+							Width="178" 
+							Grid.ColumnSpan="2" 
+							Grid.RowSpan="3" 
+							Height="146" 
+							VerticalAlignment="Bottom"
+							/>
 					</Grid>
 				</hc:SimplePanel>
 			</TabItem>
-
-			<TabItem x:Name="tabSummary" Header="_Summary" Background="AliceBlue" ToolTip="View Summary Tab"  >
+			<!---==============================================  SUMMARY TAB  ===============================================================-->
+			<TabItem 
+				x:Name="tabSummary" 
+				Header="_Summary" 
+				hc:BackgroundSwitchElement.MouseDownBackground="AliceBlue" 
+				Background="LightSteelBlue" 
+				Style="{DynamicResource BaseStyle}" 
+				FocusVisualStyle="{DynamicResource BaseStyle}" 
+				ToolTip="View Summary Tab" 
+				FontSize="16"  >
 				<hc:SimplePanel Background="LightSteelBlue">
 					<Grid>
 						<Grid.ColumnDefinitions>
@@ -222,7 +273,13 @@
 							<RowDefinition Height="1*" />
 							<RowDefinition Height="1*" />
 						</Grid.RowDefinitions>
-
+						<Image
+							Margin="10,45,0,45" 
+							Source="/IncIncLogo.png" 
+							HorizontalAlignment="Left" 
+							Width="178" 
+							Grid.RowSpan="4"
+							/>
 						<!--  main_Row 0  -->
 						<Label
 			Grid.Row="0"
@@ -243,7 +300,7 @@
 			VerticalAlignment="Center"
 			IsReadOnly="True"
 			TextWrapping="Wrap"
-			Background="#FFDEDEDE"
+			Background="#FFEFEFEF"
 			Text="0"
 			ToolTip="Total Number of Workers"
 			/>
@@ -283,7 +340,7 @@
 			VerticalAlignment="Center"
 			IsReadOnly="True"
 			TextWrapping="Wrap" 
-			Background="#FFDEDEDE" 
+			Background="#FFEFEFEF" 
 			Text="0" 
 			ToolTip="Total Number of Messages Sent"
 			/>
@@ -322,7 +379,7 @@
 			VerticalAlignment="Center"
 			IsReadOnly="True"
 			TextWrapping="Wrap" 
-			Background="#FFDEDEDE" 
+			Background="#FFEFEFEF" 
 			Text="$0.00"  
 			ToolTip="Calculated Total Pay of All Workers"
 			/>
@@ -361,9 +418,8 @@
 			VerticalAlignment="Center"
 			IsReadOnly="True"
 			TextWrapping="Wrap" 
-			Background="#FFDEDEDE" 
-			Text="$0.00" 
-			ToolTip="Calculated Average Pay Per Worker"
+			Background="#FFEFEFEF" 
+			ToolTip="Calculated Average Pay Per Worker" Text="$0.00"
 			/>
 
 						<Label 
@@ -398,35 +454,109 @@
 					</Grid>
 				</hc:SimplePanel>
 			</TabItem>
-			<TabItem x:Name="tabEmployeeList" Header="_Employee List " Background="AliceBlue" ToolTip="View Employee List Tab"  >
+			<!---==============================================  EMPLOYEE LIST TAB  ===============================================================-->
+			<TabItem 
+				x:Name="tabEmployeeList" 
+				Header="_Employee List " 
+				hc:BackgroundSwitchElement.MouseDownBackground="AliceBlue" 
+				Background="LightSteelBlue" 
+				Style="{DynamicResource BaseStyle}" 
+				FocusVisualStyle="{DynamicResource BaseStyle}" 
+				ToolTip="View Employee List Tab" 
+				BorderBrush="{x:Null}" 
+				FontSize="16"  >
 
 				<hc:SimplePanel Background="LightSteelBlue">
 
-					<DataGrid  x:Name="dataGridEmployeeList" BorderBrush="LightSteelBlue"  Background="AliceBlue" AlternatingRowBackground="LightSteelBlue" VerticalGridLinesBrush="SlateGray" HorizontalGridLinesBrush="SlateGray" >
-						<DataGrid.RowHeaderStyle>
-							<Style/>
-						</DataGrid.RowHeaderStyle>
-						<DataGrid.RowHeaderTemplateSelector>
-							<DataTemplateSelector/>
-						</DataGrid.RowHeaderTemplateSelector>
-
-					</DataGrid>
+					<DataGrid  
+						x:Name="dataGridEmployeeList" 
+						BorderBrush="LightSteelBlue"  
+						Background="LightSteelBlue"  
+						AlternatingRowBackground="AliceBlue" 
+						VerticalGridLinesBrush="SlateGray" 
+						HorizontalGridLinesBrush="SlateGray" 
+						ColumnHeaderStyle="{DynamicResource DataGridItemTemplate}" 
+						Style="{DynamicResource DataGridBaseStyle}"  
+						/>
 					<!--AutoGenerateColumns="True" ItemsSource="{Binding Source=Entries}"-->
 				</hc:SimplePanel>
 			</TabItem>
+			<TabItem 
+				x:Name="tabPayrollList" 
+				Header="Pay_roll List" 
+				hc:BackgroundSwitchElement.MouseDownBackground="AliceBlue" 
+				Background="LightSteelBlue" 
+				Style="{DynamicResource BaseStyle}" 
+				FocusVisualStyle="{DynamicResource BaseStyle}" 
+				ToolTip="View PayrollList Tab" 
+				BorderBrush="{x:Null}" 
+				FontSize="16">
+				<hc:SimplePanel Background="LightSteelBlue">
+					<DataGrid  
+					x:Name="dataGridPayrollList" 
+					BorderBrush="LightSteelBlue"  
+					Background="LightSteelBlue"  
+					AlternatingRowBackground="AliceBlue" 
+					VerticalGridLinesBrush="SlateGray" 
+					HorizontalGridLinesBrush="SlateGray" 
+					ColumnHeaderStyle="{DynamicResource DataGridItemTemplate}" 
+					Style="{DynamicResource DataGridBaseStyle}"  
+				/>
+				</hc:SimplePanel>
+			</TabItem>
 		</TabControl>
+		<!---==============================================||||  TAB CONTROL END  ||||========================================================-->
+		<!---=========================================|||   STATUS BAR & EXIT BUTTON    |||===================================================-->
 		<!--Row 1: Contains the Exit button, available to all tabs.-->
-		<Button x:Name="buttonExit" Content="E_xit" Margin="10,4" Width="400" Grid.Row="1" ToolTip="Click here to exit the application." Background="AliceBlue" Click="CloseClick"  TabIndex="8" />
+		<Button 
+			x:Name="buttonExit" 
+			Content="E_xit" 
+			Margin="10,2,10,2" 
+			Width="400" 
+			Grid.Row="1" 
+			ToolTip="Click here to exit the application." 
+			Background="AliceBlue" 
+			Click="CloseClick"  
+			TabIndex="8" 
+			FontSize="16" 
+			Padding="10,0,10,0" 
+			/>
 
 
 		<!--Row 2: Contains the StatusBar.-->
-		<StatusBar x:Name="statusArea" Grid.Row="2" Background="#FFF2F2F2">
-			<StatusBarItem Content="Current Status:" FontSize="12" Background="Transparent" Margin="0,0,0,2"/>
-			<StatusBarItem HorizontalAlignment="Left" VerticalAlignment="Center" >
-
-				<Label x:Name="labelStatus" Content="null" FontSize="12" Height="42" Background="Transparent" HorizontalAlignment="Left" />
-			</StatusBarItem>
-			<StatusBarItem x:Name="statusBarClock" HorizontalAlignment="Right" VerticalAlignment="Center" Content="" Loaded="DisplayClock" />
+		<StatusBar 
+			x:Name="statusArea" 
+			Grid.Row="2" 
+			Background="#FFF2F2F2">
+			<StatusBarItem 
+				Content="Current Status:" 
+				FontSize="12" 
+				Background="Transparent" 
+				FontWeight="Normal" 
+				FontStyle="Italic" 
+				Width="88" 
+				Padding="6,6,0,6" 
+				FlowDirection="LeftToRight"
+				/>
+			<Label 
+				x:Name="labelStatus" 
+				Content=" null" 
+				FontSize="12"  
+				Background="Transparent" 
+				FontWeight="Regular" 
+				Height="30" 
+				HorizontalAlignment="Left" 
+				Padding="6,6,10,6" 
+				Width="371" 
+				HorizontalContentAlignment="Left"
+				/>
+			<StatusBarItem 
+				x:Name="statusBarClock" 
+				HorizontalAlignment="Right" 
+				VerticalAlignment="Center" 
+				Content="" 
+				Loaded="DisplayClock"
+				/>
 		</StatusBar>
 
 	</Grid>
