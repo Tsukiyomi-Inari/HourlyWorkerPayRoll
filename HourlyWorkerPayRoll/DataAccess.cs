@@ -35,7 +35,7 @@ namespace HourlyWorkerPayRoll
              * class recording on the subject of connection strings (Week 6/7),
              * as well as https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/connection-strings-and-configuration-files .
              * Other options may be viable. */
-
+			#region OTHER CONNECTION STRING OPTIONS
 			//return "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" +
 			//	   "C:\\Users\\Katherine Bellman\\Source\\Repos\\HourlyWorkerPayroll\\HourlyWorkerPayroll" +
 			//	   "\\WorkerDatabase.mdf;Integrated Security=True;Connect Timeout=30";
@@ -44,7 +44,7 @@ namespace HourlyWorkerPayRoll
 			//return "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" +
 			//    Directory.GetCurrentDirectory() +
 			//    "\\WorkerDatabase.mdf;Integrated Security=True;Connect Timeout=30";
-
+			#endregion
 			string returnValue = null;
 
 			// Look for myConnectionString in the connectionStrings section.
@@ -54,6 +54,7 @@ namespace HourlyWorkerPayRoll
 			if (myConnectionString != null)
 				returnValue = myConnectionString.ConnectionString;
 
+			//YEY CONNECTION!
 			return returnValue;
 		}
 
@@ -78,7 +79,10 @@ namespace HourlyWorkerPayRoll
 			// Try to connect to the database, and use the adapter to fill the table
 			try
 			{
+				//database is open for input
 				dbConnection.Open();
+
+				//fill with data from database
 				adapter.Fill(employeeTable);
 			}
 			catch (Exception ex)
@@ -89,7 +93,10 @@ namespace HourlyWorkerPayRoll
 			}
 			finally
 			{
+				//When done, stop filling destination
 				adapter.Dispose();
+
+				//End connection with database
 				dbConnection.Close();
 			}
 
@@ -240,12 +247,15 @@ namespace HourlyWorkerPayRoll
 			// Declare the SQL connection and the SQL command
 			SqlConnection dbConnection = new SqlConnection(GetConnectionString());
 
+			//Set up query for Total Worker Pay (SUM) and divide it  by the number of Workers(Entries COUNT), to return the calculated average pay
 			SqlCommand command = new SqlCommand("SELECT SUM(Pay)/COUNT(EntryId) FROM Entries", dbConnection);
 
 			// Try to open a connection to the database and read the total. Return result.
 			try
 			{
+				//Open the connection to the database
 				dbConnection.Open();
+				//Return the query from database source
 				return command.ExecuteScalar().ToString();
 			}
 			catch (Exception ex)
@@ -256,6 +266,7 @@ namespace HourlyWorkerPayRoll
 			}
 			finally
 			{
+				//Close the connection to databse after task complete
 				dbConnection.Close();
 			}
 		}

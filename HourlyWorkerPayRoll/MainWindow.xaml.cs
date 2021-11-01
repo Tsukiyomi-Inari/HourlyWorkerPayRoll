@@ -6,6 +6,8 @@
  * Course: NETD 3202
  * Date: October 26th 2021
  *
+ * Modified: October 31st 2021
+ *
  * Description: Main application functionality file
  */
 
@@ -54,7 +56,14 @@ namespace HourlyWorkerPayRoll
 			//check which sent changed event to change label
 			if ((TextBox)sender == textBoxWorkerNameFirst || (TextBox)sender == textBoxWorkerNameLast)
 			{
-				labelNameError.Content = string.Empty;
+				if ((TextBox)sender == textBoxWorkerNameFirst)
+				{
+					labelNameError.Content = string.Empty;
+				}
+				else
+				{
+					labelNameError.Content = string.Empty;
+				}
 			}
 			else
 			{
@@ -94,7 +103,7 @@ namespace HourlyWorkerPayRoll
 				{
 					//output strings of calculated attribute into coresponding textbox with valid output format
 					textBoxWorkerTotalPay.Text = worker.Pay.ToString("C");
-					StatusBarUpdate($"Worker {worker.FirstName + " " + worker.LastName} successfully added.");
+					StatusBarUpdate($"Worker {worker.FirstName + worker.LastName} with {worker.Messages} messages, with {worker.Pay}pay was successfully added.");
 
 				}
 
@@ -169,8 +178,7 @@ namespace HourlyWorkerPayRoll
 		}
 
 		#region EMPLOYEE LIST TAB EVENT HANDLERS
-
-
+		//Space holder for Employee list tab
 		#endregion
 		#endregion
 
@@ -220,7 +228,7 @@ namespace HourlyWorkerPayRoll
 			{
 				buttonClear.Focus();
 				//Do not show status update at start unless...
-				if (StartUpIsFalse == true || buttonCalculate.IsPressed)
+				if (StartUpIsFalse == true)
 				{
 					StatusBarUpdate("Viewing Payroll Entry Tab");
 				}
@@ -240,6 +248,9 @@ namespace HourlyWorkerPayRoll
 				textBoxAveragePay.Text = HourlyWorkerPay.AveragePay.ToString("C");
 				StatusBarUpdate("Viewing Summary tab.");
 
+				//Set startup value to true aka. app is beyond initialization
+				StartUpIsFalse = true;
+
 				//while in on tab, change tab background brush
 				tabSummary.Background = Brushes.AliceBlue;
 				//When not on tab, change tab background brush 
@@ -250,7 +261,9 @@ namespace HourlyWorkerPayRoll
 			else if (Equals(tabControlInterface.SelectedItem, tabEmployeeList))
 			{
 				dataGridEmployeeList.ItemsSource = DataAccess.GetEmployeeList().DefaultView;
-				StatusBarUpdate("Viewing employee tab.");
+
+				//Set startup value to true aka. app is beyond initialization
+				StartUpIsFalse = true;
 
 				//while in on tab, change tab background brush
 				tabEmployeeList.Background = Brushes.AliceBlue;
@@ -349,9 +362,9 @@ namespace HourlyWorkerPayRoll
 		/// <param name="status">Application status</param>
 		private void StatusBarUpdate(string status)
 		{
+			//for changing the text of the label on the status bar of applicaiton
 			labelStatus.Content = status;
 		}
-
 
 
 		#endregion //===============================================

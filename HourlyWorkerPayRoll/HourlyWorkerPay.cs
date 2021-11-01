@@ -115,7 +115,6 @@ namespace HourlyWorkerPayRoll
 							returnRate = messagesPayRate[counter];
 						}
 					}
-
 					//calculate inputed worker total pay
 					double result = returnRate * sentInput;
 					//convert calculation result  to decimal to pass to employeePay 
@@ -136,11 +135,14 @@ namespace HourlyWorkerPayRoll
 
 		public string FirstName
 		{
+			//Gets worker first name
 			get { return employeeFName; }
 			set
 			{
+				// When not empty...
 				if (value.Trim() != string.Empty)
 				{
+					//Check for valid character entry
 					if (!Regex.IsMatch(value.Trim(), @"^[a-zA-Z]+$"))
 					{
 						//When no alphabetic characters are found within input field, inform user of error
@@ -149,6 +151,7 @@ namespace HourlyWorkerPayRoll
 					}
 					else
 					{
+						//When it passes validation, assign it to varriable
 						employeeFName = value;
 					}
 				}
@@ -163,11 +166,14 @@ namespace HourlyWorkerPayRoll
 
 		public string LastName
 		{
+			//gets worker last name
 			get { return employeeLName; }
 			set
 			{
+				// When not empty...
 				if (value.Trim() != string.Empty)
 				{
+					//Check for valid character entry
 					if (!Regex.IsMatch(value.Trim(), @"^[a-zA-Z]+$"))
 					{
 						//When no alphabetic characters are found within input field, inform user of error
@@ -176,6 +182,7 @@ namespace HourlyWorkerPayRoll
 					}
 					else
 					{
+						//When it passes validation, assign it to varriable
 						employeeLName = value;
 					}
 				}
@@ -189,6 +196,7 @@ namespace HourlyWorkerPayRoll
 
 		/// <summary>
 		/// Gets and sets the number of messages sent by a worker
+		/// to the HourlyWoerkerClass
 		/// </summary>
 		/// <exception cref="ArgumentException"></exception>
 		/// <returns>an employee's number of messages</returns>
@@ -204,6 +212,7 @@ namespace HourlyWorkerPayRoll
 				// Check if the Messages value is blank.
 				if (value.Trim() != String.Empty)
 				{
+					//Check if its a valid entry by changing it to an integer
 					if (!int.TryParse(value, out employeeMessages))
 					{
 						//if not able to convert input to integer, throw an argument exception
@@ -218,8 +227,8 @@ namespace HourlyWorkerPayRoll
 					}
 				}
 				else
-				{
-					throw new ArgumentNullException(MessagesParameter, "Messages is a required field.");
+				{   //If failed first validation, tell user that it's required
+					throw new ArgumentNullException(MessagesParameter, "Messages is a required field and cannot be empty.");
 				}
 			}
 		}
@@ -230,6 +239,7 @@ namespace HourlyWorkerPayRoll
 		/// <returns>a worker's pay</returns>
 		public decimal Pay
 		{
+			//Retruns the employes pay value
 			get { return employeePay; }
 		}
 
